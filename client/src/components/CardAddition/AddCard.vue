@@ -17,10 +17,6 @@ export default {
 
 
       async addNewCard() {
-
-        console.log(this.cardEnglish)
-        console.log(this.cardFrench)
-        console.log(this.max)
         if(this.max==0){
           this.max=Math.max.apply(null, this.cards_id.map(e => e.id))
         }
