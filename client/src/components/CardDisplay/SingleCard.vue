@@ -1,8 +1,7 @@
 <template>
     <div class="card" id="card-details" v-on:click="revealOrNext">
-      <p class="recto" v-if="!end_of_the_library"><strong>{{ card.position? card.recto : card.verso}}</strong></p>
+      <p class="recto"><strong>{{ card.position? card.recto : card.verso}}</strong></p>
       <p class="verso" v-if="answer_revealed"><em>{{ card.position? card.verso : card.recto}}</em></p>
-      <p class="verso warning" v-if="end_of_the_library"> &#x1F44F; This is the end of the library, if you want to practice in the other way around please refresh the page. &#x1F44F; </p>
     </div>
 </template>
 
@@ -12,31 +11,29 @@ import gql from 'graphql-tag';
 export default {
   name: 'SingleCard',
   methods: {
-      async revealOrNext() {
-        if (!this.end_of_the_library) {
-          if (this.answer_revealed) {
-            this.$emit('next-card', this.current_index);
-            this.answer_revealed = false;
-            await this.$apollo.mutate({
-              mutation: gql`mutation ($id: Int!, $position: Boolean! ) {
-                              flipCard(id: $id, position: $position ) {
-                                id
-                                position
-                              }
-                            }`,
-              variables: {
-                position: this.card.position,
-                id:this.card.id,
-              },
-              refetchQueries: [{
-                query: this.$apollo.queries.card.options.query,
-                variables: { id: parseInt(this.cards_id[this.current_index]) },
-              }]
-            });
-          } else {
-            this.answer_revealed = true;
-          }
-        }
+    async revealOrNext() {
+      if (this.answer_revealed) {
+        this.$emit('next-card', this.current_index);
+        this.answer_revealed = false;
+        await this.$apollo.mutate({
+          mutation: gql`mutation ($id: Int!, $position: Boolean! ) {
+                          flipCard(id: $id, position: $position ) {
+                            id
+                            position
+                          }
+                        }`,
+          variables: {
+            position: this.card.position,
+            id:this.card.id,
+          },
+          refetchQueries: [{
+            query: this.$apollo.queries.card.options.query,
+            variables: { id: parseInt(this.cards_id[this.current_index]) },
+          }]
+        });
+      } else {
+        this.answer_revealed = true;
+      }
     }
   },
   apollo: {
