@@ -12,7 +12,7 @@ Vue.use(VueRouter);
 
 const apolloClient = new ApolloClient({
 
-  uri: "http://node.oignon.ovh1.ec-m.fr/graphql"
+  uri: "http://localhost:4000/graphql"
 
 })
 
