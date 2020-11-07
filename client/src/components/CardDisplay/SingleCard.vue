@@ -17,8 +17,7 @@ export default {
           if (this.answer_revealed) {
             this.$emit('next-card', this.current_index);
             this.answer_revealed = false;
-          } else {
-            const result =  await this.$apollo.mutate({
+            await this.$apollo.mutate({
               mutation: gql`mutation ($id: Int!, $position: Boolean! ) {
                               flipCard(id: $id, position: $position ) {
                                 id
@@ -29,15 +28,15 @@ export default {
                 position: this.card.position,
                 id:this.card.id,
               },
+              refetchQueries: [{
+                query: this.$apollo.queries.card.options.query,
+                variables: { id: parseInt(this.cards_id[this.current_index]) },
+              }]
             });
-
-            console.log(result)
-            //console.log(this.card.position)
-            //console.log(this.card.id)
+          } else {
             this.answer_revealed = true;
           }
         }
-        console.log(this.card)
     }
   },
   apollo: {
@@ -66,7 +65,6 @@ export default {
       },
   }},
   props: {
-    end_of_the_library: Boolean,
     current_index: Number,
     cards_id: Array,
   },
