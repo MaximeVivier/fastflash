@@ -7,8 +7,9 @@
   "author": "Adèle Bougeix, Fanis Michalakis, Maxime Vivier",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "cd client; yarn serve;",
+    "prod:back": "NODE_ENV=production node index.js",
+    "dev:back": "NODE_ENV=development nodemon index.js",
+    "dev:front": "cd client; yarn serve;",
     "test": "jest",
     "api-test": "jest --testRegex='api-test.js'",
     "firefox-test": "jest --testRegex='firefox'",

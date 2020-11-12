@@ -1,9 +1,11 @@
-const { app, mongoose } = require('./api/app.js');
+const { app, mongoose } = require('./api/app');
+const { server, db } = require('./config');
 
-mongoose.connect(process.env.MONGODB,  {useNewUrlParser: true}, { useUnifiedTopology: true } )
+mongoose.connect(db.url,  {useNewUrlParser: true}, { useUnifiedTopology: true } )
 mongoose.connection.once('open', () => {
-  console.log('connected to database');
-});
-app.listen(process.env.PORT_API, () => {
-  console.log('now listening for requests on port 4000');
+  console.log('Connected to database');
+  app.listen(server.port, () => {
+    console.log(`NODE_ENV --> ${process.env.NODE_ENV}`);
+    console.log(`Now listening for requests on port ${server.port}`);
+  });
 });
