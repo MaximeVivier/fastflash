@@ -27,4 +27,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
-    - run: npm run dev:back
+    - run: NODE_ENV=development node index.js
