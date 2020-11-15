@@ -22,8 +22,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
-      env: # Or as an environment variable
-        DB_URL: ${{ secrets.DB_URL }}
+      env:
+        MONGODB_URL_DEV: ${{ secrets.MONGODB_URL_DEV }}
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
