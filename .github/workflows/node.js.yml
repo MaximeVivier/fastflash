@@ -20,11 +20,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - shell: bash
       env:
         MONGODB_URL_DEV: ${{ secrets.MONGODB_URL_DEV }}
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - run: NODE_ENV=development node index.js
+      run: |
+        npm install
+        NODE_ENV=development node index.js
