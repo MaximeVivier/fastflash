@@ -1,29 +1,29 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+# # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js CI
+# name: Node.js CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+# on:
+#   push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
 
-jobs:
-  build:
+# jobs:
+#   build:
 
-    runs-on: ubuntu-latest
+#     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x]
+#     strategy:
+#       matrix:
+#         node-version: [14.x]
 
-    steps:
-    - uses: actions/checkout@v2
-    - shell: bash
-      env:
-        MONGODB_URL_DEV: ${{ secrets.MONGODB_URL_DEV }}
-        PORT_API_DEV: ${{ secrets.PORT_API_DEV }}
-      run: |
-        npm install
-        NODE_ENV=development node index.js
+#     steps:
+#     - uses: actions/checkout@v2
+#     - shell: bash
+#       env:
+#         MONGODB_URL_DEV: ${{ secrets.MONGODB_URL_DEV }}
+#         PORT_API_DEV: ${{ secrets.PORT_API_DEV }}
+#       run: |
+#         npm install
+#         NODE_ENV=development node index.js
