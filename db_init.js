@@ -2,8 +2,9 @@ const { mongoose } = require('./api/app.js');
 const Card = require('./api/models/card');
 const db_data = require('./db_data.json');
 const { exists } = require('./api/models/card');
+const { db } = require('./config');
 
-mongoose.connect(process.env.MONGODB,  {useNewUrlParser: true}, { useUnifiedTopology: true } )
+mongoose.connect(db.url,  {useNewUrlParser: true}, { useUnifiedTopology: true } )
 mongoose.connection.once('open', async () => {
   console.log('connected to database');
   console.log('Initializing the db by erasing everything then populate it');
