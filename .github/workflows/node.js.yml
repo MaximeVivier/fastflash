@@ -23,6 +23,7 @@ jobs:
     - shell: bash
       env:
         MONGODB_URL_DEV: ${{ secrets.MONGODB_URL_DEV }}
+        PORT_API_DEV: ${{ secrets.PORT_API_DEV }}
       run: |
         npm install
         NODE_ENV=development node index.js
