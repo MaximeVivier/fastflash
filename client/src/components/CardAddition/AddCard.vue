@@ -58,11 +58,11 @@ export default {
     apollo: {
     cards_id: {
       query: gql`{
-        cards {
+        all_cards {
           id
         }
       }`,
-      update: data => data.cards
+      update: data => data.all_cards
     },
   },
     data() {
