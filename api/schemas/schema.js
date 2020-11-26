@@ -42,7 +42,15 @@ const LibraryType= new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-        cards: {
+        cards_of_lib: {
+            type: new GraphQLList(CardType),
+            args: { library: { type: GraphQLString } },
+            resolve(parent, args){
+                console.log(`\n\n\ndata --> ${args.library}\n\n\n`);
+                return Card.find({library: args.library});
+            }
+        },
+        all_cards: {
             type: new GraphQLList(CardType),
             resolve(parent, args){
                 return Card.find({});
