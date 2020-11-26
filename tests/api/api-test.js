@@ -1,6 +1,7 @@
 const supertest = require("supertest");
 const { app, mongoose } = require('./../../api/app');
 const { api, db } = require('../../config');
+const db_init = require('../../db_init');
 
 let server;
 
@@ -18,6 +19,7 @@ const start = async () => new Promise((res) => {
 
 describe('get /ping request', () => {
   beforeAll(async () => {
+    await db_init();
     await start();
     request = supertest(app);
   });
