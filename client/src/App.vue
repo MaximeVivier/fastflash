@@ -2,7 +2,7 @@
 <div>
 <p>
   <router-link to="/add-card"><button class="link"> &#x2795; Add a card</button></router-link>
-  <router-link to="/"><button class="link">	&#x1F4DA; See the library</button></router-link>
+  <router-link to="/"><button class="link">	&#x1F4DA; All the library</button></router-link>
 </p>
 <div>
   <router-view></router-view>

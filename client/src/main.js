@@ -4,8 +4,9 @@ import VueApollo from 'vue-apollo';
 import ApolloClient from 'apollo-boost';
 import VueRouter from 'vue-router';
 
-import CardDisplay from './components/CardDisplay'
-import CardAddition from './components/CardAddition'
+import CardDisplay from './components/CardDisplay';
+import CardAddition from './components/CardAddition';
+import Libraries from './components/Libraries';
 
 Vue.use(VueApollo);
 Vue.use(VueRouter);
@@ -25,7 +26,8 @@ Vue.config.productionTip = false
 
 const routes = [
   { path: '/add-card', component: CardAddition },
-  { path: '/', component: CardDisplay }
+  { path: '/library/:libName', name: 'library', component: CardDisplay },
+  { path: '/', component: Libraries }
 ]
 
 const router = new VueRouter({
