@@ -2,6 +2,8 @@ const { app, mongoose } = require('./api/app');
 const { api, db } = require('./config');
 
 // Connect to db
+console.log('db --> ', db);
+console.log('api --> ', api);
 mongoose.connect('',  {useNewUrlParser: true}, { useUnifiedTopology: true } )
 mongoose.connection.once('open', () => {
   console.log('Connected to database');
