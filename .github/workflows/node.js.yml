@@ -27,10 +27,11 @@ jobs:
         MONGODB_URL_DEV: ${{ secrets.MONGODB_URL_DEV }}
         PORT_API_DEV: ${{ secrets.PORT_API_DEV }}
       run: |
-        echo $PORT_API_DEV
-        echo $MONGODB_URL_DEV
+        echo début
         npm install
+        echo "après install"
         NODE_ENV=development node index.js
+        echo "après launching index"
 
 #     - uses: actions/checkout@v2
 #     - shell: bash
