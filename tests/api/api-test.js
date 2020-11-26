@@ -42,10 +42,10 @@ describe('get /ping request', () => {
     // Sends GET Request to /test endpoint
     const resp = await request.post('/graphql')
       .send({
-        query: "{cards { id } }"
+        query: "{all_cards { id } }"
       });
 
-    expect(resp.text).toBe("{\"data\":{\"cards\":[{\"id\":1},{\"id\":3},{\"id\":2},{\"id\":4},{\"id\":5},{\"id\":6},{\"id\":7},{\"id\":8},{\"id\":9}]}}");
+    expect(resp.text).toBe("{\"data\":{\"all_cards\":[{\"id\":1},{\"id\":3},{\"id\":2},{\"id\":4},{\"id\":5},{\"id\":6},{\"id\":7},{\"id\":8},{\"id\":9}]}}");
 
     done();
   });
