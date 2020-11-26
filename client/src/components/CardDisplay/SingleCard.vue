@@ -1,6 +1,6 @@
 <template>
     <div class="card" id="card-details" v-on:click="revealOrNext">
-      <p class="recto"><strong>{{ card.position? card.recto : card.verso}}</strong></p>
+      <p class="recto"><strong>{{ card.position? card.recto : card.verso }}</strong></p>
       <p class="verso" v-if="answer_revealed"><em>{{ card.position? card.verso : card.recto}}</em></p>
     </div>
 </template>
@@ -37,12 +37,6 @@ export default {
     }
   },
   apollo: {
-    // Simple query that will update the 'hello' vue property
-    cards: gql`{
-      cards {
-        id
-      }
-    }`,
     card:{
       // gql query
       query: gql`query card($id: Int!) {
@@ -70,7 +64,6 @@ export default {
     return {
 
       answer_revealed: false,
-      cards: [],
       card: {},
     }
 
