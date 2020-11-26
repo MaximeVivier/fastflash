@@ -27,13 +27,18 @@ export default {
   },
   apollo: {
     cards_id: {
-      query: gql`{
-        cards {
+      query: gql`query card($library: String!){
+        cards_of_lib(library: $library) {
           id
         }
       }`,
-      update: data => data.cards
-    },
+      update: data => data.cards_of_lib,
+      variables () {
+        return {
+          library: this.$route.params.libName,
+        }
+      },
+    }
   },
   data() {
     return {
