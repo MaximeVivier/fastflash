@@ -2,6 +2,10 @@ const supertest = require("supertest");
 const { app, mongoose } = require('./../../api/app');
 const { api, db } = require('../../config');
 const db_init = require('../../db_init');
+
+// Building test with this data is importnant because that's the data we populate the database with.
+// Let's compare directly with it and not static strings, because if this file changes,
+//  tests won't be accurate anymore even if the feature works well.
 const data_for_test = require('../../db_data.json');
 
 let server;
@@ -49,6 +53,7 @@ describe('Test all graphql routes', () => {
         query: `{all_cards { ${all_fields_return_from_graphql} } }`
       });
 
+    // Order is important here otherwise the tests won't pass, but actually we don't mind the order that's why we sort.
     expect(all_cards.sort((a,b) => a.id - b.id)).toEqual(data_for_test.sort((a,b) => a.id - b.id));
 
     done();
@@ -78,7 +83,8 @@ describe('Test all graphql routes', () => {
       verso: "ant",
       position: true
     };
-
+    
+    // When you want to change something about this test data, you only have to do it in the previous object
     const str_card_to_add_for_the_test_query = `mutation{
       addCard(
         id:${card_to_add_for_the_test.id},
