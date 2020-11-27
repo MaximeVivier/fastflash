@@ -46,7 +46,6 @@ const RootQuery = new GraphQLObjectType({
             type: new GraphQLList(CardType),
             args: { library: { type: GraphQLString } },
             resolve(parent, args){
-                console.log(`\n\n\ndata --> ${args.library}\n\n\n`);
                 return Card.find({library: args.library});
             }
         },
