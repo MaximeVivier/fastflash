@@ -2,8 +2,10 @@ const supertest = require("supertest");
 const { app, mongoose } = require('./../../api/app');
 const { api, db } = require('../../config');
 const db_init = require('../../db_init');
+const data_for_test = require('../../db_data.json');
 
 let server;
+const all_fields_return_from_graphql = 'id\nrecto\nverso\nrecto_def\nverso_def\nposition\nlibrary '
 
 const start = async () => new Promise((res) => {
   mongoose.connect(db.url,  {useNewUrlParser: true}, { useUnifiedTopology: true } )
@@ -17,7 +19,7 @@ const start = async () => new Promise((res) => {
   });
 });
 
-describe('get /ping request', () => {
+describe('Test all graphql routes', () => {
   beforeAll(async () => {
     await db_init();
     await start();
@@ -40,52 +42,103 @@ describe('get /ping request', () => {
     done();
   });
 
-  test('graphql cards', async (done) => {
+  test('graphql all_cards', async (done) => {
     // Sends GET Request to /test endpoint
-    const resp = await request.post('/graphql')
+    const { body: { data: { all_cards } } } = await request.post('/graphql')
       .send({
-        query: "{all_cards { id } }"
+        query: `{all_cards { ${all_fields_return_from_graphql} } }`
       });
 
-    expect(resp.text).toBe("{\"data\":{\"all_cards\":[{\"id\":1},{\"id\":3},{\"id\":2},{\"id\":4},{\"id\":5},{\"id\":6},{\"id\":7},{\"id\":8},{\"id\":9}]}}");
+    expect(all_cards.sort((a,b) => a.id - b.id)).toEqual(data_for_test.sort((a,b) => a.id - b.id));
 
     done();
   });
 
   test('graphql card', async (done) => {
-    const resp = await request.post('/graphql')
+    const id_of_the_card_to_fetch = 1;
+    const data_for_fetch_card_test = data_for_test.find(el => el.id === id_of_the_card_to_fetch);
+
+    const { body: { data: { card } } } = await request.post('/graphql')
       .send({
-        query: "{card(id:1) { id } }"
+        query: `{card(id:${id_of_the_card_to_fetch}) { ${all_fields_return_from_graphql} } }`
       });
+    
+    expect(card).toEqual(data_for_fetch_card_test)
 
-      expect(resp.text).toBe("{\"data\":{\"card\":{\"id\":1}}}")
-
-      done();
+    done();
   });
 
   test('graphql addCard', async (done) => {
-    const resp = await request.post('/graphql')
+    const card_to_add_for_the_test = {
+      id: 10,
+      library: "french/english",
+      recto_def: "french",
+      verso_def: "english",
+      recto: "fourmi",
+      verso: "ant",
+      position: true
+    };
+
+    const str_card_to_add_for_the_test_query = `mutation{
+      addCard(
+        id:${card_to_add_for_the_test.id},
+        library:\"${card_to_add_for_the_test.library}\",
+        recto_def:\"${card_to_add_for_the_test.recto_def}\",
+        verso_def:\"${card_to_add_for_the_test.verso_def}\",
+        recto:\"${card_to_add_for_the_test.recto}\",
+        verso:\"${card_to_add_for_the_test.verso}\",
+        position:${card_to_add_for_the_test.position}) { 
+          ${all_fields_return_from_graphql}
+        } }`;
+
+    const { body: { data: { addCard } } } = await request.post('/graphql')
       .send({
-        query: "mutation{addCard(id:10,library:\"french/english\",recto_def:\"english\",verso_def:\"french\",recto:\"ant\",verso:\"fourmi\",position:true) { id\nrecto\nverso } }"
+        query: str_card_to_add_for_the_test_query
       });
 
-      expect(resp.text).toBe("{\"data\":{\"addCard\":{\"id\":10,\"recto\":\"ant\",\"verso\":\"fourmi\"}}}")
+    expect(addCard).toEqual(card_to_add_for_the_test);
 
-      done();
+    done();
   });
 
   test('graphql flipCard', async (done) => {
-    const resp = await request.post('/graphql')
+    const id_of_the_card_to_flip = 1;
+
+    const data_for_flip_card_test = data_for_test.find(el => el.id === id_of_the_card_to_flip);
+
+    const str_card_to_flip_query = `mutation{flipCard(id:${data_for_flip_card_test.id},position:${data_for_flip_card_test.position}) {id} }`;
+
+    await request.post('/graphql')
       .send({
-        query: "mutation{flipCard(id:1,position:true) {id} }"
+        query: str_card_to_flip_query
       });
 
-    const resp2 = await request.post('/graphql')
+    const { body: { data: { card } } } = await request.post('/graphql')
       .send({
-        query: "{card(id:1) { id\nposition } }"
+        query: `{card(id:${id_of_the_card_to_flip}) { ${all_fields_return_from_graphql} } }`
       });
 
-      expect(resp2.text).toBe("{\"data\":{\"card\":{\"id\":1,\"position\":false}}}")
+    expect(card).toEqual({ ...data_for_flip_card_test , position: !data_for_flip_card_test.position });
+
+    done();
+  });
+
+  test('graphql cards_of_lib', async (done) => {
+    // Be sure of the fields we ask grphql to match the data expected
+    const library_to_test = 'frances/espanol';
+
+    let { body: { data: { cards_of_lib } } } = await request.post('/graphql')
+      .send({
+        query: `{cards_of_lib(library:"${library_to_test}") { ${all_fields_return_from_graphql} } }`
+      });
+
+      const data_for_cards_of_lib_test = data_for_test
+        .filter(el => el.library === 'frances/espanol')
+        .sort((a,b) => a.id - b.id);
+      
+      cards_of_lib = cards_of_lib.sort((a,b) => a.id - b.id);
+
+      expect(cards_of_lib).toEqual(data_for_cards_of_lib_test);
 
       done();
   });
