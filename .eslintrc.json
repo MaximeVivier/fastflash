@@ -1,0 +1,23 @@
+{
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "prettier",
+        "airbnb-base"
+    ],
+    "plugins": ["prettier"],
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "rules": {
+        "camelcase": "off",
+        "comma-dangle": ["error", "never"],
+        "no-warning-comments": [2, { "terms": ["todo", "fixme"], "location": "anywhere" }],
+        "max-len": ["error", { "code": 120 }],
+        "prettier/prettier": "error"
+    }
+}
